@@ -11,6 +11,7 @@ from datetime import date, datetime
 # import unittest
 # import pytest
 from pathlib import Path
+import environ
 
 import requests
 
@@ -40,8 +41,27 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 # from . import Website
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+BASE_DIR = Path(__file__).resolve(strict=True).parent
+# APPS_DIR = BASE_DIR / "src"
 sys.path.append(BASE_DIR)
+# FIXTURE_DIRS = [f"{BASE_DIR}/tests/fixtures"]
+
+# # Set the project base directory
+# LOCAL_BASE_DIR = Path(__file__).resolve(strict=True).parent.parent os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+
+env = environ.Env()
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+AMZN_LOGIN = env("AMZN_LOGIN", default="")
+AMZN_PASSWORD = env("AMZN_PASSWORD", default="")
+AMZN_ARTICLE = env("AMZN_ARTICLE", default="")
 
 
 # # Get an instance of a logger
@@ -522,25 +542,40 @@ if __name__ == "__main__":
     driver = webdriver.Firefox()
     # driver.implicitly_wait(self.TIMEOUT_DEFAULT_S)
     driver.implicitly_wait(12)
-    driver.get("https://www.amazon.fr/")
-    title = driver.title
-    driver.quit()
-    driver = None
 
+    # login
+    signin_page = "https://www.amazon.fr/ap/signin?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.fr%2F%3Fref_%3Dnav_custrec_signin&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=frflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&"
+    driver.get(signin_page)
+    title = driver.title
+
+    text_box = driver.find_element(by=By.ID, value="ap_email")
+    submit_button = driver.find_element(by=By.ID, value="continue")
+    title = driver.title
     print(f"Title {title}")
 
-    # driver.get("https://www.selenium.dev/selenium/web/web-form.html")
+    text_box.send_keys(AMZN_LOGIN)
+    submit_button.click()
 
-    # title = driver.title
-    # assert title == "Web form"
+    # password
+    text_box = driver.find_element(by=By.ID, value="ap_password")
+    submit_button = driver.find_element(by=By.ID, value="signInSubmit")
+    title = driver.title
+    print(f"Title {title}")
 
-    # driver.implicitly_wait(0.5)
+    text_box.send_keys(AMZN_PASSWORD)
+    submit_button.click()
 
-    # text_box = driver.find_element(by=By.NAME, value="my-text")
-    # submit_button = driver.find_element(by=By.CSS_SELECTOR, value="button")
+    driver.get(AMZN_ARTICLE)
+    title = driver.title
+    print(f"Title {title}")
 
-    # text_box.send_keys("Selenium")
-    # submit_button.click()
+    submit_button = driver.find_element(by=By.ID, value="add-to-cart-button")
+    submit_button.click()
+
+    submit_button = driver.find_element(by=By.ID, value="sc-buy-box-ptc-button")
+
+    driver.quit()
+    driver = None
 
     # message = driver.find_element(by=By.ID, value="message")
     # value = message.text

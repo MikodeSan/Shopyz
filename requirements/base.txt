@@ -46,6 +46,8 @@ fake_useragent
 # django-filter
 # django-guardian
 # dj-database-url
+django-environ
+
 
 ### - Config -
 # configparser
