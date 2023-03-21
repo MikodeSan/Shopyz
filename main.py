@@ -2,47 +2,52 @@
 
 import os
 import sys
-from enum import Enum, auto
-from typing import Optional
 
-import logging
-from datetime import date, datetime
+# from enum import Enum, auto
+# from typing import Optional
+
+# import logging
+# from datetime import date, datetime
+import json
+from pathlib import Path
 
 # import unittest
 # import pytest
-from pathlib import Path
+
+
+# import requests
 import environ
 
-import requests
-
-# import urllib.request
-from urllib.parse import urljoin
-from fake_useragent import UserAgent
-from bs4 import BeautifulSoup
+# # import urllib.request
+# from urllib.parse import urljoin
+# from fake_useragent import UserAgent
+# from bs4 import BeautifulSoup
 
 from selenium import webdriver
-from selenium.webdriver.firefox.webdriver import WebDriver
 
-# from selenium.webdriver.firefox.service import Service as FirefoxService
-# from selenium.webdriver.chrome.webdriver import WebDriver
-# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.firefox.webdriver import WebDriver
+
+# # from selenium.webdriver.firefox.service import Service as FirefoxService
+# # from selenium.webdriver.chrome.webdriver import WebDriver
+# # from selenium.webdriver.chrome.options import Options
 
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 
 # from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support.ui import WebDriverWait
 
 # from selenium.webdriver.support.wait import WebDriverWait
 # from selenium.webdriver.support import expected_conditions as EC
 # from selenium.webdriver.support.expected_conditions import presence_of_element_located
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-
+from selenium.common.exceptions import NoSuchElementException  # TimeoutException
 
 # from . import Website
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent
 # APPS_DIR = BASE_DIR / "src"
+RESOURCE_FILE_PATH = os.path.join(BASE_DIR, "tests", "rsc", "products.json")
 sys.path.append(BASE_DIR)
 # FIXTURE_DIRS = [f"{BASE_DIR}/tests/fixtures"]
 
@@ -541,9 +546,11 @@ if __name__ == "__main__":
 
     driver = webdriver.Firefox()
     # driver.implicitly_wait(self.TIMEOUT_DEFAULT_S)
-    driver.implicitly_wait(12)
+    driver.implicitly_wait(3)
 
-    # login
+    # Connect
+
+    ## login
     signin_page = "https://www.amazon.fr/ap/signin?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.fr%2F%3Fref_%3Dnav_custrec_signin&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.assoc_handle=frflex&openid.mode=checkid_setup&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&"
     driver.get(signin_page)
     title = driver.title
@@ -551,28 +558,69 @@ if __name__ == "__main__":
     text_box = driver.find_element(by=By.ID, value="ap_email")
     submit_button = driver.find_element(by=By.ID, value="continue")
     title = driver.title
-    print(f"Title {title}")
 
     text_box.send_keys(AMZN_LOGIN)
     submit_button.click()
 
-    # password
+    ## password
     text_box = driver.find_element(by=By.ID, value="ap_password")
     submit_button = driver.find_element(by=By.ID, value="signInSubmit")
     title = driver.title
-    print(f"Title {title}")
 
     text_box.send_keys(AMZN_PASSWORD)
     submit_button.click()
 
-    driver.get(AMZN_ARTICLE)
-    title = driver.title
-    print(f"Title {title}")
+    # Order
 
-    submit_button = driver.find_element(by=By.ID, value="add-to-cart-button")
-    submit_button.click()
+    ## list of products
+    # with open(RESOURCE_FILE_PATH, "r", encoding="utf-8") as file_h:
+    with open(RESOURCE_FILE_PATH, "r") as file_h:
+        content_dct = json.load(file_h)
 
-    submit_button = driver.find_element(by=By.ID, value="sc-buy-box-ptc-button")
+    for order in content_dct["order_lst"]:
+        for product in order["product_lst"]:
+
+            driver.get(product["url"])
+            title = driver.title
+            print(f"Title {title}")
+
+            try:
+                submit_button = driver.find_element(
+                    by=By.ID, value="add-to-cart-button"
+                )
+            except NoSuchElementException:
+                submit_button = driver.find_element(
+                    by=By.ID, value="rcx-subscribe-submit-button-announce"
+                )
+                print("Product not available due to add to cart button")
+
+            try:
+                select_elt = driver.find_element(by=By.ID, value="quantity")
+
+                # all_options = select_elt.find_elements(By.TAG_NAME, "option")
+                # for option in all_options:
+                #     value = option.get_attribute("value")
+                #     text = option.get_attribute("text")
+                #     print(f"Value is: {value}")
+                #     option.click()
+
+                select_elt = Select(select_elt)
+                option_list = select_elt.options
+                # print(option_list)
+                # selected_option_list = select_elt.all_selected_options
+                # select_elt.select_by_visible_text(str(product["quantity"]))
+                select_elt.select_by_value(str(product["quantity"]))
+                # select_elt.select_by_index(0)
+
+            except NoSuchElementException:
+                print("Product not available due to quantity selector")
+
+            submit_button.click()
+
+            try:
+                driver.find_element(by=By.ID, value="sw-gtc")
+            except NoSuchElementException:
+                driver.find_element(by=By.ID, value="attach-sidesheet-view-cart-button")
 
     driver.quit()
     driver = None

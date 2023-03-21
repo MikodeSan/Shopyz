@@ -1,0 +1,21 @@
+{
+    "order_lst": [
+        {
+            "order_id": 0,
+            "product_lst": [
+                {
+                    "url": "https://www.amazon.fr/INIU-Chargeur-Charge-Rapide-Samsung/dp/B09P8KM9Z6/ref=sr_1_6?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=2KVGLD5H0GPUV&keywords=cable+usb+c&qid=1679249548&sprefix=cable+usb+c%2Caps%2C197&sr=8-6",
+                    "quantity": 2
+                },
+                {
+                    "url": "https://www.amazon.fr/livre-d%C3%A9fis-%C3%A9pargne-budg%C3%A9taires-hebdomadaires/dp/B0B9QWF9D6/ref=sr_1_49?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3SVCMULGU3K5Y&keywords=nouvel+livre+un+euro&qid=1679243288&sprefix=nouvel+livre+un+euro%2Caps%2C189&sr=8-49",
+                    "quantity": 5
+                },
+                {
+                    "url": "https://www.amazon.fr/Paper-InkJoy-stylos-bouchon-pointe/dp/B07MXF9TRM/ref=sr_1_40?__mk_fr_FR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=1CX0M8LZUDL57&keywords=stylo&qid=1679243514&sprefix=stylo%2Caps%2C202&sr=8-40",
+                    "quantity": 3
+                }
+            ]
+        }
+    ]
+}
