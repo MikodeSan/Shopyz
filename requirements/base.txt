@@ -39,7 +39,7 @@ fake_useragent
 # flask_sqlalchemy
 # Flask-Testing
 
-# django
+django
 # djangorestframework
 # django-debug-toolbar
 # django-extensions
