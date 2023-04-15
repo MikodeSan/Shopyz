@@ -10,7 +10,7 @@ class Shop(models.Model):
     url = models.URLField(blank=True, null=True, default="")
 
 
-class ProductReference(models.Model):
+class ShopProduct(models.Model):
     """Self-explanatory"""
 
     reference = models.CharField(max_length=120, blank=False, null=False, default="")

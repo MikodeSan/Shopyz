@@ -1,4 +1,4 @@
-from .order import Order, Item
+from .order import Order, ShopOrder, Item
 from .payment import Payment
-from .shop import Shop, ProductReference
+from .shop import Shop, ShopProduct
 from .product import Product

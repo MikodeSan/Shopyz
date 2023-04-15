@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="ProductReference",
+            name="ShopProduct",
             fields=[
                 (
                     "id",
