@@ -30,19 +30,16 @@ environ.Env.read_env(os.path.join(PROJECT_DIR, ".env"))
 env = environ.Env()
 
 
-DJANGO_ENV = env("DJANGO_ENV")
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-a!h9fc-waa##j_!2&sh9e$goe948=(20c8@lu-0xx2*+%&hz$o"
-# SECRET_KEY = env("DJANGO_SECRET_KEY", default="collectstatic_mode")
+SECRET_KEY = env("DJANGO_SECRET_KEY", default="random_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 
 # Application definition
