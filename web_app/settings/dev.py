@@ -3,11 +3,6 @@ from . import *  # noqa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
-
-
-# SMARTDOCS_API_BASE_PATH = "https://staging-api.shop.eu"
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -29,7 +24,10 @@ DATABASES = {
 # INSTALLED_APPS += ["django_extensions", "debug_toolbar", "pympler"]  # noqa F405
 INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
-# MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa F405
+MIDDLEWARE += [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+]  # noqa F405
 
 # LOGGING = {
 #     "version": 1,
