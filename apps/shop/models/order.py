@@ -1,5 +1,9 @@
+import datetime
+
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 from .shop import Shop, ShopProduct
@@ -13,6 +17,12 @@ class Order(models.Model):
     order_date = models.DateTimeField("purchase date")
     # shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     # products = models.ManyToMany(Question, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.order_date} - {self.user} - {self.reference}"
+
+    def was_published(self):
+        return self.order_date >= timezone.now() - datetime.timedelta(days=1)
 
 
 class ShopOrder(models.Model):
