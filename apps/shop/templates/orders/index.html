@@ -1,0 +1,16 @@
+<div><p>Hello, Kontan wè zot an lè Freedom-shop :).</p></div>
+{% if latest_order_list %}
+<p>List des commandes enregistées:</p>
+<ul>
+  {% for order in latest_order_list %}
+  <li>
+    <a href="{% url 'order:detail' order.id %}">{{ order.reference }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>Aucune commande enregistrée.</p>
+{% endif %}
+<div>
+  <p><a href="{% url 'order:cart' %}">Saisir une nouvelle commande</a>.</p>
+</div>

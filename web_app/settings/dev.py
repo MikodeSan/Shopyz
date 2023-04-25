@@ -14,7 +14,7 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
 ]  # noqa F405
 
 # LOGGING = {

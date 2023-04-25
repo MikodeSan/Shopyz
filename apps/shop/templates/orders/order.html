@@ -1,0 +1,13 @@
+<form action="{% url 'order:cart' %}" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend><h1>Nouvelle commande</h1></legend>
+    {% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+    <input type="url" name="url_link" value="" />
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label
+    ><br />
+  </fieldset>
+  <input type="submit" value="Valider" />
+</form>
