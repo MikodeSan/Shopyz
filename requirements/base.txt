@@ -63,7 +63,7 @@ django-environ
 
 # --- Database ---
 
-# psycopg2
+psycopg2
 # mysql-connector-python		# do not use mysql-connector
 # influxdb-client[ciso]
 # influxdb-client
